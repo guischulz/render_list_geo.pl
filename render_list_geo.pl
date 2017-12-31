@@ -5,7 +5,7 @@ use Getopt::Std;
 use Math::Trig;
 
 my $options = {};
-getopts("n:l:m:x:X:y:Y:z:Z:h", $options);
+getopts("n:l:m:x:X:y:Y:z:Z:hf", $options);
 
 if ($options->{h}) {
   print "options: (x,X,y,Y,z,Z - required, no checks, small letters should be less)\n";
@@ -15,6 +15,7 @@ if ($options->{h}) {
   print "  -x <x>, -X <x> start and end longitude (in geographic coordinates, WGS84)\n";
   print "  -y <y>, -Y <y> start and end latitude (in geographic coordinates, WGS84)\n";
   print "  -z <z>, -Z <z> start and end level value\n";
+  print "  -f             render tiles even if they seem current\n";
   print "\n";
   exit;
 }
@@ -47,7 +48,8 @@ if ($options->{x} && $options->{X} &&
 	if ($options->{n}) {$cmd = $cmd." -n ".$options->{n}};
 	if ($options->{m}) {$cmd = $cmd." -m ".$options->{m}};
 	if ($options->{l}) {$cmd = $cmd." -l ".$options->{l}};
-  print $cmd."\n";
+	if ($options->{f}) {$cmd = $cmd." -f"}; 
+	print $cmd."\n";
 	system($cmd);
 	print("\nZoom factor: ".$iz." finished at\n");
 	system("date");
