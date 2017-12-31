@@ -3,6 +3,7 @@ use warnings;
 use strict;
 use Getopt::Std;
 use Math::Trig;
+use List::Util qw[min max];
 
 my $options = {};
 getopts("n:l:m:x:X:y:Y:z:Z:hf", $options);
@@ -40,8 +41,8 @@ if ($options->{x} && $options->{X} &&
 	$y = int($zoom * (1 - log(tan($options->{y}*pi/180) + sec($options->{y}*pi/180))/pi)/2);
 	$Y = int($zoom * (1 - log(tan($options->{Y}*pi/180) + sec($options->{Y}*pi/180))/pi)/2);
 	#some stupid magic: aligning max range values to the border of meta-bundles (caused by internal bug of render_list)
-	$X=(int($X/$bulkSize)+1)*$bulkSize-1;
-	$y=(int($y/$bulkSize)+1)*$bulkSize-1;
+	$X= min((int($X/$bulkSize)+1)*$bulkSize-1, 2**$iz-1);
+	$y= min((int($y/$bulkSize)+1)*$bulkSize-1, 2**$iz-1);
 	$n = 2;
 	#be careful! y and Y used in reversed order
 	$cmd="render_list -a -z ".$iz." -Z ".$iz." -x ".$x." -X ".$X." -y ".$Y." -Y ".$y;
